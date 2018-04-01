@@ -2,12 +2,13 @@ function Background(game){
   this.game = game;
 
   this.img = new Image();
-  this.img.src = 'img/background.jpg';
+  //this.img.src = 'img/background.jpg';
+  this.img.src = 'img/4.jpg';
 
   this.x = 0;
   this.y = 0;
 
-  this.dx = 5;
+  this.dx = 1;
 }
 
 Background.prototype.draw = function(){
@@ -17,7 +18,6 @@ Background.prototype.draw = function(){
 }
 
 Background.prototype.move = function(){
-  // debugger;
   this.x -= this.dx;
   if (this.x < -this.game.canvas.width) this.x = 0;
 }

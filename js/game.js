@@ -2,10 +2,11 @@ function Game(canvasId){
   this.canvas = document.getElementById(canvasId);
   this.ctx = this.canvas.getContext("2d");
 
-  this.fps = 30;
+  this.fps = 60;
 
   this.interval;
   this.background = new Background(this);
+  this.player = new Player(this);
 
 }
 
@@ -23,6 +24,7 @@ Game.prototype.clear = function() {
 
 Game.prototype.draw = function(){
   this.background.draw();
+  this.player.draw();
 }
 
 Game.prototype.move = function(){
