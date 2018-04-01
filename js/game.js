@@ -29,4 +29,5 @@ Game.prototype.draw = function(){
 
 Game.prototype.move = function(){
   this.background.move();
+
 }
