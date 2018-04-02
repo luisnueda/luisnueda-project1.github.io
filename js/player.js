@@ -53,7 +53,7 @@ Player.prototype.setListeners = function(){
 
 Player.prototype.moveRight = function(){
   if(this.x < this.game.canvas.width - (this.w)){
-    return this.x += this.dy;          
+     return this.x += this.dy;   
   }
 }
 
@@ -75,3 +75,4 @@ Player.prototype.moveDown = function(){
     return this.y += this.dy;
   }
 }
+

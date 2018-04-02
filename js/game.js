@@ -25,6 +25,8 @@ Game.prototype.clear = function() {
 Game.prototype.draw = function(){
   this.background.draw();
   this.player.draw();
+
+
 }
 
 Game.prototype.move = function(){
