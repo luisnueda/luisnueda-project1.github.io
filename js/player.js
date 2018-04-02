@@ -13,6 +13,8 @@ function Player(game){
 
   this.setListeners();
 
+  this.bullet = []
+
 }
 
 Player.prototype.draw = function(){
@@ -23,6 +25,8 @@ Player.prototype.draw = function(){
     this.y,
     this.w,
     this.h)
+
+
 }
 
 Player.prototype.setListeners = function(){
@@ -32,6 +36,7 @@ Player.prototype.setListeners = function(){
     var LEFT_KEY = 37;
     var UP_KEY = 38;
     var DOWN_KEY = 40;
+    var SPACE = 32;
 
       if (event.keyCode === RIGHT_KEY ) {
         this.moveRight();
@@ -48,8 +53,18 @@ Player.prototype.setListeners = function(){
       if(event.keyCode === DOWN_KEY ){
         this.moveDown();
       }
+
+      if(event.keyCode === SPACE ){
+        this.shoot();
+      }
+      
     }.bind(this);
 }
+
+Player.prototype.shoot = function () {
+  this.bullet.push(new Bullet(this.game, this.x, this.y))
+};
+
 
 Player.prototype.moveRight = function(){
   if(this.x < this.game.canvas.width - (this.w)){

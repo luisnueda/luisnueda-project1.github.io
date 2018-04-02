@@ -46,19 +46,25 @@ Game.prototype.clearObstacles = function() {
 
 Game.prototype.isCollision = function() {
   var collision = false;
-
+  
+  for(var i = 0; i < this.player.bullet.length; i++){
+    for(var j = 0; j< this.obstacles.length; j++){
+      if (this.player.bullet[i].x < this.obstacles[j].x + this.obstacles[j].w && this.player.bullet[i].x + this.player.bullet[i].r > this.obstacles[j].x &&
+        this.player.bullet[i].y < this.obstacles[j].y + this.obstacles[j].h && this.player.bullet[i].y + this.player.bullet[i].r > this.obstacles[j].y) {
+        console.log("DISPARO")
+    }
+    }
+  }
+  
   this.obstacles.forEach(function(o){
     if (((this.player.x + this.player.w - 20) >= o.x )&&
         (this.player.x < (o.x + o.w - 10)) &&
         ((this.player.y + this.player.h - 20) >= o.y)&&
         (this.player.y <= o.y + o.h -10)) {
         var actualX = o.x;
-        if(actualX - 190){
-
 
           this.obstacles.splice(this.obstacles.indexOf(o),1);
 
-        }
 
         this.explosion.draw(o.x, o.y);
 
@@ -75,15 +81,17 @@ Game.prototype.generateObstacle = function() {
 Game.prototype.draw = function(){
   this.background.draw();
   this.player.draw();
-  
+  this.player.bullet.forEach (e => {
+    e.draw();
+  })
   this.obstacles.forEach(function(o) { o.draw(); })
-
-
 }
 
 Game.prototype.move = function(){
   this.background.move();
-
+  this.player.bullet.forEach (e => {
+    e.move();
+  })
   this.obstacles.forEach(function(o) { o.move(); })
 
 }
