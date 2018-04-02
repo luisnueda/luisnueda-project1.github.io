@@ -53,9 +53,12 @@ Game.prototype.isCollision = function() {
         ((this.player.y + this.player.h - 20) >= o.y)&&
         (this.player.y <= o.y + o.h -10)) {
         var actualX = o.x;
+        if(actualX - 190){
+
 
           this.obstacles.splice(this.obstacles.indexOf(o),1);
 
+        }
 
         this.explosion.draw(o.x, o.y);
 
