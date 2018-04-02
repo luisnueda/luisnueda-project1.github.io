@@ -5,7 +5,7 @@ function Player(game){
   this.img.src = "img/ship.png";
 
   this.x = 0;
-  this.y = this.game.canvas.height/2;
+  this.y = 325.25;
   this.w = 190;
   this.h = 170;
 

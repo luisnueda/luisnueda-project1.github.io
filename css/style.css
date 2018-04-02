@@ -1,10 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 *{
   padding: 0;
   margin: 0;
 }
-
+#canvas{
+  max-width: 100%;
+}
 body{
   background: black;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
 }
 /* Poner canvas al 100% */
 .pricipal{
@@ -15,4 +20,7 @@ body{
 }
 .pricipal-canvas{
 
+}
+p{
+  margin-top: 2px;
 }
