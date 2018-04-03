@@ -21,7 +21,6 @@ Bullet.prototype.draw = function(){
     this.w,
     this.h)
 
-
 }
 
 Bullet.prototype.move = function(){

@@ -1,6 +1,8 @@
 function Player(game){
   this.game = game;
 
+  
+
   this.img = new Image();
   this.img.src = "img/ship.png";
 
