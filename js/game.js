@@ -12,9 +12,12 @@ function Game(canvasId){
   
   this.explosion = new Explosion(this);
 
+  this.soundtrack = new Audio("sound/soundtrack.mp3")
+
 }
 
 Game.prototype.start = function() {
+  //this.soundtrack.play();
   this.interval = setInterval(function(){
 
     this.framesCounter ++;
@@ -58,8 +61,8 @@ Game.prototype.isCollision = function() {
   
   for (var i = 0; i < this.player.bullet.length; i++) {
     for (var j = 0; j < this.obstacles.length; j++) {
-      if (//this.player.bullet[i].x > this.obstacles[j].x + this.obstacles[j].w && 
-        this.player.bullet[i] && this.obstacles[j] &&
+      
+      if (  this.player.bullet[i] && this.obstacles[j] &&
         this.player.bullet[i].x + this.player.bullet[i].w >= this.obstacles[j].x  - 70 && 
         this.player.bullet[i].y + (this.player.bullet[i].h + 30) >= this.obstacles[j].y &&
         this.player.bullet[i].y + this.player.bullet[i].h <= this.obstacles[j].y + (this.obstacles[j].h - 30)){
@@ -83,7 +86,7 @@ Game.prototype.isCollision = function() {
 
         this.obstacles.splice(this.obstacles.indexOf(o),1);
 
-        this.explosion.draw(o.x, o.y);
+        this.explosion.drawShip(this.player.x, this.player.y);
 
       collision = true;
     }
@@ -106,6 +109,7 @@ Game.prototype.draw = function(){
 
 Game.prototype.move = function(){
   this.background.move();
+  this.player.move();
   this.player.bullet.forEach (e => {
     e.move();
   })

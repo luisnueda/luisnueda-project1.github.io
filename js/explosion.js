@@ -20,3 +20,14 @@ Explosion.prototype.draw = function(x, y){
     this.h)
     
 }
+
+Explosion.prototype.drawShip = function(x, y){
+  this.game.ctx.drawImage(
+    this.img,
+    x - 25,
+    y - 25,
+    200,
+    200)
+
+}
+

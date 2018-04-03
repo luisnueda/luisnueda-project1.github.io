@@ -4,12 +4,23 @@ function Player(game){
   this.img = new Image();
   this.img.src = "img/ship.png";
 
+  this.disparo = new Audio("sound/disparo.mp3")
+
   this.x = 0;
   this.y = 325.25;
   this.w = 190;
   this.h = 170;
 
-  this.dy = 30;
+  this.moveRight = false;
+  this.moveLeft = false;
+  this.moveUp = false;
+  this.moveDown = false;
+
+  this.vx = 1;
+  this.vy = 1;
+
+  this.ax = 5;
+  this.ay = 5;
 
   this.setListeners();
 
@@ -25,33 +36,32 @@ Player.prototype.draw = function(){
     this.y,
     this.w,
     this.h)
-
-
 }
 
 Player.prototype.setListeners = function(){
-    document.onkeydown = function (event) {
     
-    var RIGHT_KEY = 39;
-    var LEFT_KEY = 37;
-    var UP_KEY = 38;
-    var DOWN_KEY = 40;
-    var SPACE = 32;
+  var RIGHT_KEY = 39;
+  var LEFT_KEY = 37;
+  var UP_KEY = 38;
+  var DOWN_KEY = 40;
+  var SPACE = 32;
 
+  document.onkeydown = function (event) {
+    
       if (event.keyCode === RIGHT_KEY ) {
-        this.moveRight();
+        this.moveRight = true;
       }
 
       if(event.keyCode === LEFT_KEY ){
-        this.moveLeft();
+        this.moveLeft = true;
       }
 
       if(event.keyCode === UP_KEY ){
-        this.moveUp();
+        this.moveUp = true;
       }
 
       if(event.keyCode === DOWN_KEY ){
-        this.moveDown();
+        this.moveDown = true;
       }
 
       if(event.keyCode === SPACE ){
@@ -59,35 +69,40 @@ Player.prototype.setListeners = function(){
       }
       
     }.bind(this);
+
+    document.onkeyup = function (event){
+      if(event.keyCode === RIGHT_KEY){
+        this.moveRight = false;
+      }
+      if(event.keyCode === LEFT_KEY){
+        this.moveLeft = false;
+      }
+      if(event.keyCode === UP_KEY){
+        this.moveUp = false;
+      }
+      if(event.keyCode === DOWN_KEY ){
+        this.moveDown = false;
+      }
+    }.bind(this);
 }
+
+Player.prototype.move = function() {
+
+  if (this.moveRight == true && this.x < this.game.canvas.width - (this.w)) {
+    this.x += this.vx * this.ax;
+  }
+  if (this.moveLeft == true && this.x > 0){
+    this.x -= this.vx * this.ax;
+  }
+  if (this.moveUp == true && this.x >= 0 && this.y > 0 + this.h/10){
+    this.y -= this.vy * this.ay;
+  }
+  if (this.moveDown == true && this.x >= 0 && this.y < this.game.canvas.height - this.h){
+    this.y += this.vy * this.ay;
+  }
+};
 
 Player.prototype.shoot = function () {
   this.bullet.push(new Bullet(this.game, this.x, this.y))
+  this.disparo.play();
 };
-
-
-Player.prototype.moveRight = function(){
-  if(this.x < this.game.canvas.width - (this.w)){
-     return this.x += this.dy;   
-  }
-}
-
-Player.prototype.moveLeft = function(){
-  if(this.x > 0){
-    return this.x -= this.dy;
-  }
-}
-
-Player.prototype.moveUp = function(){
-  console.log(this.x, this.y)
-  if(this.x >= 0 && this.y > 0 + this.h/10){
-    return this.y -= this.dy;
-  }
-}
-
-Player.prototype.moveDown = function(){
-  if(this.x >= 0 && this.y < this.game.canvas.height - (this.h + this.dy)){
-    return this.y += this.dy;
-  }
-}
-
