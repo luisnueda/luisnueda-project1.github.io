@@ -21,6 +21,8 @@ Game.prototype.start = function() {
     if (this.framesCounter > 1000) this.framesCounter = 0;
 
     this.clear();
+    this.clearObstacles();
+    this.clearBullet();
     this.move();
     this.draw();
 
@@ -44,15 +46,32 @@ Game.prototype.clearObstacles = function() {
   })
 };
 
+Game.prototype.clearBullet = function() {
+  this.player.bullet = this.player.bullet.filter(function(o) {
+    return o.x < this.canvas.width;
+  })
+  console.log(this.player.bullet.length)
+};
+
 Game.prototype.isCollision = function() {
   var collision = false;
   
-  for(var i = 0; i < this.player.bullet.length; i++){
-    for(var j = 0; j< this.obstacles.length; j++){
-      if (this.player.bullet[i].x < this.obstacles[j].x + this.obstacles[j].w && this.player.bullet[i].x + this.player.bullet[i].r > this.obstacles[j].x &&
-        this.player.bullet[i].y < this.obstacles[j].y + this.obstacles[j].h && this.player.bullet[i].y + this.player.bullet[i].r > this.obstacles[j].y) {
-        console.log("DISPARO")
-    }
+  for (var i = 0; i < this.player.bullet.length; i++) {
+    for (var j = 0; j < this.obstacles.length; j++) {
+      if (//this.player.bullet[i].x > this.obstacles[j].x + this.obstacles[j].w && 
+        this.player.bullet[i] && this.obstacles[j] &&
+        this.player.bullet[i].x + this.player.bullet[i].w >= this.obstacles[j].x  - 70 && 
+        this.player.bullet[i].y + (this.player.bullet[i].h + 30) >= this.obstacles[j].y &&
+        this.player.bullet[i].y + this.player.bullet[i].h <= this.obstacles[j].y + (this.obstacles[j].h - 30)){
+
+        this.explosion.draw(this.obstacles[j].x, this.obstacles[j].y);
+        this.obstacles.splice(j,1);
+        
+        
+        //console.log(this.player.bullet.indexOf(this.player.bullet[i]))
+        this.player.bullet.splice(this.player.bullet.indexOf(this.player.bullet[i]),1);
+
+      }
     }
   }
   
@@ -61,10 +80,8 @@ Game.prototype.isCollision = function() {
         (this.player.x < (o.x + o.w - 10)) &&
         ((this.player.y + this.player.h - 20) >= o.y)&&
         (this.player.y <= o.y + o.h -10)) {
-        var actualX = o.x;
 
-          this.obstacles.splice(this.obstacles.indexOf(o),1);
-
+        this.obstacles.splice(this.obstacles.indexOf(o),1);
 
         this.explosion.draw(o.x, o.y);
 

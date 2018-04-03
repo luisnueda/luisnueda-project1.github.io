@@ -6,8 +6,8 @@ function Obstacle(game){
 
 
   this.x = this.game.canvas.width;
-  this.y = Math.random() * (this.game.canvas.height - 0) + 0;
-  //this.y = 100;
+  this.y = Math.random() * ((this.game.canvas.height - 90) - 0) + 0;
+  //this.y = 200;
   this.w = 50;
   this.h = 80;
 }
@@ -23,5 +23,6 @@ Obstacle.prototype.draw = function() {
 };
 
 Obstacle.prototype.move = function() {
-  this.x -= 5;
+  this.x -= 1;
+  //5
 };

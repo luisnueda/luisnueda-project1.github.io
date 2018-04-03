@@ -18,4 +18,5 @@ Explosion.prototype.draw = function(x, y){
     y,
     this.w,
     this.h)
+    
 }
