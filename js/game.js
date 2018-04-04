@@ -14,9 +14,9 @@ function Game(canvasId){
   this.score = new Score(this);
   this.player = new Player(this);
 
-  this.obstacles = [new Obstacle(this)];
-  this.obstaclesEnemy = [new ObstacleEnemy(this)];
-  this.obstaclesEnemy2 = [new ObstacleEnemy2(this)];
+  this.obstacles = [];
+  this.obstaclesEnemy = [];
+
   
   this.explosion = new Explosion(this);
 
@@ -30,34 +30,39 @@ Game.prototype.start = function() {
 
     this.framesCounter ++;
     this.framesTime ++;
+
     if (this.framesCounter > 1000) this.framesCounter = 0;
 
     this.clear();
     this.clearObstacles();
-    this.clearEnemy();
-    this.clearEnemy2();
+    this.obstaclesEnemy.forEach(function(e){
+        e.clearEnemy()
+        
+
+    })
+    
     this.clearBullet();
     this.move();
     this.draw();
-
+    
     if(this.framesTime < 350){
-      if (this.framesCounter % 100 === 0) {
+      if (this.framesCounter % 100 == 0) {
         this.generateObstacle();
       }
     }else if( this.framesTime > 350){
-      if (this.framesCounter % 200 === 0) {
+      if (this.framesCounter % 200 == 0) {
         this.generateObstacle();
       }
     }
-    if (this.framesCounter % 100 === 0){
-      this.generateObstacleEnemy();
+    if (this.framesCounter % 100 == 0){
+      this.generateObstacleEnemy(0);
     }
     if (this.framesTime > 300) {
       this.estado = true;
       this.score.drawLevel();
 
-      if (this.framesCounter % 1000 === 0) {
-        this.generateObstacleEnemy2();
+      if (this.framesCounter % 10 == 0) {
+        this.generateObstacleEnemy(1);
       }
 
     }
@@ -77,18 +82,6 @@ Game.prototype.clear = function() {
 
 Game.prototype.clearObstacles = function() {
   this.obstacles = this.obstacles.filter(function(o) {
-    return o.x > 0;
-  })
-};
-
-Game.prototype.clearEnemy = function() {
-  this.obstaclesEnemy = this.obstaclesEnemy.filter(function(o) {
-    return o.x > 0;
-  })
-};
-
-Game.prototype.clearEnemy2 = function() {
-  this.obstaclesEnemy2 = this.obstaclesEnemy2.filter(function(o) {
     return o.x > 0;
   })
 };
@@ -179,12 +172,8 @@ Game.prototype.generateObstacle = function() {
   this.obstacles.push(new Obstacle(this));
 };
 
-Game.prototype.generateObstacleEnemy = function() {
-  this.obstaclesEnemy.push(new ObstacleEnemy(this));
-};
-
-Game.prototype.generateObstacleEnemy2 = function() {
-  this.obstaclesEnemy2.push(new ObstacleEnemy2(this));
+Game.prototype.generateObstacleEnemy = function(n) {
+  this.obstaclesEnemy.push(new ObstacleEnemy(this,n));
 };
 
 Game.prototype.draw = function(){
@@ -196,10 +185,16 @@ Game.prototype.draw = function(){
   this.player.bullet.forEach (e => {
     e.draw();
   })
-  this.obstacles.forEach(function(o) { o.draw(); })
-  this.obstaclesEnemy.forEach(function(o) { o.drawEnemy(); })
+  this.obstacles.forEach(function(o) { 
+    o.draw(); 
+  })
+  this.obstaclesEnemy.forEach(function(o) { 
+    o.drawEnemy(); 
+  })
   if(this.estado){
-    this.obstaclesEnemy2.forEach(function(o) { o.drawEnemy2(); })
+    this.obstaclesEnemy.forEach(function(o) { 
+      o.drawEnemy(); 
+    })
   }
   
 }
@@ -212,7 +207,7 @@ Game.prototype.move = function(){
   })
   this.obstacles.forEach(function(o) { o.move(); })
   this.obstaclesEnemy.forEach(function(o) { o.moveEnemy(); })
-  this.obstaclesEnemy2.forEach(function(o) { o.moveEnemy2(); })
+  this.obstaclesEnemy.forEach(function(o) { o.moveEnemy(); })
 }
 
 Game.prototype.stop = function() {
@@ -227,11 +222,9 @@ Game.prototype.reset = function() {
   this.player = new Player(this);
   this.obstacles = [];
   this.obstaclesEnemy = [];
-  this.obstaclesEnemy2 = [];
   this.explosion = new Explosion(this);
   this.framesCounter = 0;
   this.soundtrack = new Audio("sound/soundtrack.mp3")
-
 };
 
 Game.prototype.gameOver = function() {
