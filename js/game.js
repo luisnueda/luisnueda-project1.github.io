@@ -4,6 +4,9 @@ function Game(canvasId){
 
   this.fps = 60;
   this.framesCounter = 0;
+  this.framesTime = 0;
+
+  this.estado = false;
 
   this.interval;
 
@@ -13,6 +16,7 @@ function Game(canvasId){
 
   this.obstacles = [new Obstacle(this)];
   this.obstaclesEnemy = [new ObstacleEnemy(this)];
+  this.obstaclesEnemy2 = [new ObstacleEnemy2(this)];
   
   this.explosion = new Explosion(this);
 
@@ -21,30 +25,47 @@ function Game(canvasId){
 }
 
 Game.prototype.start = function() {
-  this.soundtrack.play();
+  //this.soundtrack.play();
   this.interval = setInterval(function(){
 
     this.framesCounter ++;
+    this.framesTime ++;
     if (this.framesCounter > 1000) this.framesCounter = 0;
 
     this.clear();
     this.clearObstacles();
     this.clearEnemy();
+    this.clearEnemy2();
     this.clearBullet();
     this.move();
     this.draw();
 
-    if (this.framesCounter % 100 === 0) {
-      this.generateObstacle();
+    if(this.framesTime < 350){
+      if (this.framesCounter % 100 === 0) {
+        this.generateObstacle();
+      }
+    }else if( this.framesTime > 350){
+      if (this.framesCounter % 200 === 0) {
+        this.generateObstacle();
+      }
     }
     if (this.framesCounter % 100 === 0){
       this.generateObstacleEnemy();
+    }
+    if (this.framesTime > 300) {
+      this.estado = true;
+      this.score.drawLevel();
+
+      if (this.framesCounter % 1000 === 0) {
+        this.generateObstacleEnemy2();
+      }
+
     }
     if (this.isCollision()) {
 
     }
     if(this.score.lives == 0){
-      this.gameOver();
+        this.gameOver();
     }
 
   }.bind(this), 1000/this.fps)
@@ -62,6 +83,12 @@ Game.prototype.clearObstacles = function() {
 
 Game.prototype.clearEnemy = function() {
   this.obstaclesEnemy = this.obstaclesEnemy.filter(function(o) {
+    return o.x > 0;
+  })
+};
+
+Game.prototype.clearEnemy2 = function() {
+  this.obstaclesEnemy2 = this.obstaclesEnemy2.filter(function(o) {
     return o.x > 0;
   })
 };
@@ -156,16 +183,25 @@ Game.prototype.generateObstacleEnemy = function() {
   this.obstaclesEnemy.push(new ObstacleEnemy(this));
 };
 
+Game.prototype.generateObstacleEnemy2 = function() {
+  this.obstaclesEnemy2.push(new ObstacleEnemy2(this));
+};
+
 Game.prototype.draw = function(){
   this.background.draw();
   this.score.drawScore();
   this.score.drawLives();
+  this.score.drawFrames();
   this.player.draw();
   this.player.bullet.forEach (e => {
     e.draw();
   })
   this.obstacles.forEach(function(o) { o.draw(); })
   this.obstaclesEnemy.forEach(function(o) { o.drawEnemy(); })
+  if(this.estado){
+    this.obstaclesEnemy2.forEach(function(o) { o.drawEnemy2(); })
+  }
+  
 }
 
 Game.prototype.move = function(){
@@ -176,6 +212,7 @@ Game.prototype.move = function(){
   })
   this.obstacles.forEach(function(o) { o.move(); })
   this.obstaclesEnemy.forEach(function(o) { o.moveEnemy(); })
+  this.obstaclesEnemy2.forEach(function(o) { o.moveEnemy2(); })
 }
 
 Game.prototype.stop = function() {
@@ -190,6 +227,7 @@ Game.prototype.reset = function() {
   this.player = new Player(this);
   this.obstacles = [];
   this.obstaclesEnemy = [];
+  this.obstaclesEnemy2 = [];
   this.explosion = new Explosion(this);
   this.framesCounter = 0;
   this.soundtrack = new Audio("sound/soundtrack.mp3")

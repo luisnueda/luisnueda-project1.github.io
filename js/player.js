@@ -1,8 +1,6 @@
 function Player(game){
   this.game = game;
 
-  
-
   this.img = new Image();
   this.img.src = "img/ship.png";
 
@@ -106,5 +104,5 @@ Player.prototype.move = function() {
 
 Player.prototype.shoot = function () {
   this.bullet.push(new Bullet(this.game, this.x, this.y))
-  this.disparo.play();
+  //this.disparo.play();
 };

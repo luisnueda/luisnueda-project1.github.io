@@ -1,8 +1,10 @@
 function Background(game){
   this.game = game;
 
+  this.imgNoche = new Image();
+  this.imgNoche.src = 'img/background.jpg';
+
   this.img = new Image();
-  //this.img.src = 'img/background.jpg';
   this.img.src = 'img/4.jpg';
 
   this.x = 0;
