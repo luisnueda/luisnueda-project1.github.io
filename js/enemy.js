@@ -5,6 +5,7 @@ function ObstacleEnemy(game){
   this.imgEnemigo.src = "img/enemigo1.png";
   this.x = this.game.canvas.width;
   this.y = Math.random() * ((this.game.canvas.height - 110) - 0) + 0;
+  //this.y = 200;
   this.w = 80;
   this.h = 100;
 }

@@ -2,8 +2,6 @@ function Game(canvasId){
   this.canvas = document.getElementById(canvasId);
   this.ctx = this.canvas.getContext("2d");
 
-  this.score = 0;
-
   this.fps = 60;
   this.framesCounter = 0;
 
@@ -43,7 +41,10 @@ Game.prototype.start = function() {
       this.generateObstacleEnemy();
     }
     if (this.isCollision()) {
-      
+
+    }
+    if(this.score.lives == 0){
+      this.gameOver();
     }
 
   }.bind(this), 1000/this.fps)
@@ -176,3 +177,30 @@ Game.prototype.move = function(){
   this.obstacles.forEach(function(o) { o.move(); })
   this.obstaclesEnemy.forEach(function(o) { o.moveEnemy(); })
 }
+
+Game.prototype.stop = function() {
+  clearInterval(this.interval);
+};
+
+Game.prototype.reset = function() {
+  this.background = new Background(this);
+  this.score = new Score(this);
+  this.score.points = 0;
+  this.score.lives = 10;
+  this.player = new Player(this);
+  this.obstacles = [];
+  this.obstaclesEnemy = [];
+  this.explosion = new Explosion(this);
+  this.framesCounter = 0;
+  this.soundtrack = new Audio("sound/soundtrack.mp3")
+
+};
+
+Game.prototype.gameOver = function() {
+  this.stop();
+  
+  if(confirm("GAME OVER. Play again?")) {
+    this.reset();
+    this.start();
+  }
+};
