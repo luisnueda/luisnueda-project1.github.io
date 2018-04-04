@@ -26,3 +26,9 @@ Obstacle.prototype.move = function() {
   this.x -= 1;
   //5
 };
+
+Obstacle.prototype.clearObstacles = function() {
+  this.game.obstacles = this.game.obstacles.filter(function(o) {
+    return o.x > 0;
+  })
+};

@@ -14,9 +14,9 @@ function Game(canvasId){
   this.score = new Score(this);
   this.player = new Player(this);
 
-  this.obstacles = [new Obstacle(this)];
-  this.obstaclesEnemy = [new ObstacleEnemy(this)];
-  this.obstaclesEnemy2 = [new ObstacleEnemy2(this)];
+  this.obstacles = [];
+  this.obstaclesEnemy = [];
+  this.obstaclesEnemy2 = [];
   
   this.explosion = new Explosion(this);
 
@@ -33,10 +33,6 @@ Game.prototype.start = function() {
     if (this.framesCounter > 1000) this.framesCounter = 0;
 
     this.clear();
-    this.clearObstacles();
-    this.clearEnemy();
-    this.clearEnemy2();
-    this.clearBullet();
     this.move();
     this.draw();
 
@@ -59,7 +55,6 @@ Game.prototype.start = function() {
       if (this.framesCounter % 1000 === 0) {
         this.generateObstacleEnemy2();
       }
-
     }
     if (this.isCollision()) {
 
@@ -73,32 +68,20 @@ Game.prototype.start = function() {
 
 Game.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  this.obstacles.forEach(function(e) {
+    e.clearObstacles();
+  });
+  this.obstaclesEnemy.forEach(function(e) {
+    e.clearEnemy();
+  });
+  this.obstaclesEnemy2.forEach(function(e) {
+    e.clearEnemy2();
+  });
+  this.player.bullet.forEach(function(e) {
+    e.clearBullet();
+  });
 };
 
-Game.prototype.clearObstacles = function() {
-  this.obstacles = this.obstacles.filter(function(o) {
-    return o.x > 0;
-  })
-};
-
-Game.prototype.clearEnemy = function() {
-  this.obstaclesEnemy = this.obstaclesEnemy.filter(function(o) {
-    return o.x > 0;
-  })
-};
-
-Game.prototype.clearEnemy2 = function() {
-  this.obstaclesEnemy2 = this.obstaclesEnemy2.filter(function(o) {
-    return o.x > 0;
-  })
-};
-
-Game.prototype.clearBullet = function() {
-  this.player.bullet = this.player.bullet.filter(function(o) {
-    return o.x < this.canvas.width;
-  })
-
-};
 
 Game.prototype.isCollision = function() {
   var collision = false;
@@ -175,17 +158,19 @@ Game.prototype.isCollision = function() {
   return collision;
 };
 
+// ---- Generate ---- //
+
 Game.prototype.generateObstacle = function() {
   this.obstacles.push(new Obstacle(this));
 };
-
 Game.prototype.generateObstacleEnemy = function() {
   this.obstaclesEnemy.push(new ObstacleEnemy(this));
 };
-
 Game.prototype.generateObstacleEnemy2 = function() {
   this.obstaclesEnemy2.push(new ObstacleEnemy2(this));
 };
+
+// ----------------- //
 
 Game.prototype.draw = function(){
   this.background.draw();

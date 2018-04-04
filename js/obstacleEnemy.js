@@ -24,3 +24,9 @@ ObstacleEnemy.prototype.moveEnemy = function() {
   this.x -= 10;
 
 };
+
+ObstacleEnemy.prototype.clearEnemy = function() {
+  this.game.obstaclesEnemy = this.game.obstaclesEnemy.filter(function(o) {
+    return o.x > 0;
+  })
+};

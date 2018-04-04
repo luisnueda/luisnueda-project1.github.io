@@ -27,3 +27,9 @@ Bullet.prototype.move = function(){
   this.x += 50;
 }
 
+Bullet.prototype.clearBullet = function() {
+  this.game.player.bullet = this.game.player.bullet.filter(function(o) {
+    return o.x < this.canvas.width;
+  })
+
+};

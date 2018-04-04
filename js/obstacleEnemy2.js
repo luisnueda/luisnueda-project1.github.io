@@ -3,7 +3,7 @@ function ObstacleEnemy2(game){
 
   this.imgEnemigo2 = new Image();
   this.imgEnemigo2.src = "img/deathStar.png";
-  this.x = this.game.canvas.width;
+  this.x = this.game.canvas.width + 300;
   //this.y = Math.random() * ((this.game.canvas.height - 110) - 0) + 0;
   this.y = 300;
   this.w = 100;
@@ -22,7 +22,12 @@ ObstacleEnemy2.prototype.drawEnemy2 = function(){
 }
 
 ObstacleEnemy2.prototype.moveEnemy2 = function() {
-  this.x -= 1;
+  this.x -= 2;
 
 };
 
+ObstacleEnemy2.prototype.clearEnemy2 = function() {
+  this.game.obstaclesEnemy2 = this.game.obstaclesEnemy2.filter(function(o) {
+    return o.x > 0;
+  })
+};
