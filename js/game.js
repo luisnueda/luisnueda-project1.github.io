@@ -26,45 +26,47 @@ function Game(canvasId){
 
 Game.prototype.start = function() {
   //this.soundtrack.play();
-  this.interval = setInterval(function(){
+  this.interval = setInterval(
+    function() {
+      this.framesCounter++;
+      this.framesTime++;
+      if (this.framesCounter > 1000) this.framesCounter = 0;
 
-    this.framesCounter ++;
-    this.framesTime ++;
-    if (this.framesCounter > 1000) this.framesCounter = 0;
+      this.clear();
+      this.move();
+      this.draw();
+      this.isCollision();
 
-    this.clear();
-    this.move();
-    this.draw();
-
-    if(this.framesTime < 350){
+      if (this.framesTime < 350) {
+        if (this.framesCounter % 100 === 0) {
+          this.generateObstacle();
+        }
+      } else if (this.framesTime > 350) {
+        if (this.framesCounter % 200 === 0) {
+          this.generateObstacle();
+        }
+      }
       if (this.framesCounter % 100 === 0) {
-        this.generateObstacle();
+        this.generateObstacleEnemy();
       }
-    }else if( this.framesTime > 350){
-      if (this.framesCounter % 200 === 0) {
-        this.generateObstacle();
-      }
-    }
-    if (this.framesCounter % 100 === 0){
-      this.generateObstacleEnemy();
-    }
-    if (this.framesTime > 300) {
-      this.estado = true;
-      this.score.drawLevel();
+      if (this.framesTime > 300) {
+        this.estado = true;
+        this.score.drawLevel();
 
-      if (this.framesCounter % 1000 === 0) {
-        this.generateObstacleEnemy2();
+        if (this.framesCounter % 1000 === 0) {
+          this.generateObstacleEnemy2();
+        }
       }
-    }
-    if (this.isCollision()) {
 
-    }
-    if(this.score.lives == 0){
+      if (this.score.lives == 0) {
         this.gameOver();
-    }
+      }
+    }.bind(this),
+    1000 / this.fps
+  );
+};
 
-  }.bind(this), 1000/this.fps)
-}
+// ---- Clear ---- //
 
 Game.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -82,80 +84,19 @@ Game.prototype.clear = function() {
   });
 };
 
+// ---- Collision ---- //
 
 Game.prototype.isCollision = function() {
-  var collision = false;
   
-  for (var i = 0; i < this.player.bullet.length; i++) {
-    for (var j = 0; j < this.obstacles.length; j++) {
-      
-      if (  this.player.bullet[i] && this.obstacles[j] &&
-        this.player.bullet[i].x + this.player.bullet[i].w >= this.obstacles[j].x  - 70 && 
-        this.player.bullet[i].y + (this.player.bullet[i].h + 30) >= this.obstacles[j].y &&
-        this.player.bullet[i].y + this.player.bullet[i].h <= this.obstacles[j].y + (this.obstacles[j].h - 30)){
+  this.player.isCollision(this.obstacles);
+  this.player.isCollision(this.obstaclesEnemy);
+  this.player.isCollision(this.obstaclesEnemy2);
 
-        this.explosion.draw(this.obstacles[j].x, this.obstacles[j].y);
-        this.obstacles.splice(j,1);
-        
-        this.player.bullet.splice(this.player.bullet.indexOf(this.player.bullet[i]),1);
-
-        this.score.points += 1;
-      }
-    }
-  }
-
-  for (var i = 0; i < this.player.bullet.length; i++) {
-    for (var j = 0; j < this.obstaclesEnemy.length; j++) {
-      
-      if (  this.player.bullet[i] && this.obstaclesEnemy[j] &&
-        this.player.bullet[i].x + this.player.bullet[i].w >= this.obstaclesEnemy[j].x  - 70 && 
-        this.player.bullet[i].y + (this.player.bullet[i].h + 30) >= this.obstaclesEnemy[j].y &&
-        this.player.bullet[i].y + this.player.bullet[i].h <= this.obstaclesEnemy[j].y + (this.obstaclesEnemy[j].h - 30)){
-
-        
-        this.explosion.draw(this.obstaclesEnemy[j].x, this.obstaclesEnemy[j].y);
-        this.obstaclesEnemy.splice(j,1);
-        
-        this.player.bullet.splice(this.player.bullet.indexOf(this.player.bullet[i]),1);
-        
-        this.score.points += 5;
-      }
-    }
-  }
-  
-  this.obstacles.forEach(function(o){
-    if (((this.player.x + this.player.w - 20) >= o.x )&&
-        (this.player.x < (o.x + o.w - 10)) &&
-        ((this.player.y + this.player.h - 20) >= o.y)&&
-        (this.player.y <= o.y + o.h -10)) {
-
-        this.obstacles.splice(this.obstacles.indexOf(o),1);
-
-        this.explosion.drawShip(this.player.x, this.player.y);
-
-        this.score.lives -= 1;
-
-      collision = true;
-    }
-  }.bind(this));
-
-  this.obstaclesEnemy.forEach(function(o){
-    if (((this.player.x + this.player.w - 20) >= o.x )&&
-        (this.player.x < (o.x + o.w - 10)) &&
-        ((this.player.y + this.player.h - 20) >= o.y)&&
-        (this.player.y <= o.y + o.h -10)) {
-
-        this.obstaclesEnemy.splice(this.obstaclesEnemy.indexOf(o),1);
-
-        this.explosion.drawShip(this.player.x, this.player.y);
-        
-        this.score.lives -= 1;
-        
-      collision = true;
-    }
-  }.bind(this));
-
-  return collision;
+  this.player.bullet.forEach(function(e){
+    e.isCollision(this.obstacles);
+    e.isCollision(this.obstaclesEnemy);
+    e.isCollision(this.obstaclesEnemy2);
+  }.bind(this));  
 };
 
 // ---- Generate ---- //
@@ -170,7 +111,8 @@ Game.prototype.generateObstacleEnemy2 = function() {
   this.obstaclesEnemy2.push(new ObstacleEnemy2(this));
 };
 
-// ----------------- //
+
+// ---- Draw ---- //
 
 Game.prototype.draw = function(){
   this.background.draw();
@@ -189,6 +131,8 @@ Game.prototype.draw = function(){
   
 }
 
+// ---- Move ---- //
+
 Game.prototype.move = function(){
   this.background.move();
   this.player.move();
@@ -200,9 +144,13 @@ Game.prototype.move = function(){
   this.obstaclesEnemy2.forEach(function(o) { o.moveEnemy2(); })
 }
 
+// ---- Stop ---- //
+
 Game.prototype.stop = function() {
   clearInterval(this.interval);
 };
+
+// ---- Reset ---- //
 
 Game.prototype.reset = function() {
   this.background = new Background(this);
@@ -218,6 +166,8 @@ Game.prototype.reset = function() {
   this.soundtrack = new Audio("sound/soundtrack.mp3")
 
 };
+
+// ---- GameOver ---- //
 
 Game.prototype.gameOver = function() {
   this.stop();

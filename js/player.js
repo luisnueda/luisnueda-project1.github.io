@@ -106,3 +106,22 @@ Player.prototype.shoot = function () {
   this.bullet.push(new Bullet(this.game, this.x, this.y))
   //this.disparo.play();
 };
+
+Player.prototype.isCollision = function(a) {
+  a.forEach(
+    function(o) {
+      if (
+        this.x + this.w - 20 >= o.x &&
+        this.x < o.x + o.w - 10 &&
+        this.y + this.h - 20 >= o.y &&
+        this.y <= o.y + o.h - 10
+      ) {
+        a.splice(a.indexOf(o), 1);
+
+        this.game.explosion.drawShip(this.x, this.y);
+
+        this.game.score.lives -= 1;
+      }
+    }.bind(this)
+  );
+};

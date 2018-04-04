@@ -32,3 +32,4 @@ Obstacle.prototype.clearObstacles = function() {
     return o.x > 0;
   })
 };
+
