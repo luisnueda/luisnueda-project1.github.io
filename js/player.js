@@ -4,7 +4,10 @@ function Player(game){
   this.img = new Image();
   this.img.src = "img/ship.png";
 
-  this.disparo = new Audio("sound/disparo.mp3")
+  this.disparo = new Audio("sound/disparo.mp3");
+  this.disparo.volume = 0.2;
+  this.roca = new Audio("sound/roca.mp3");
+  
 
   this.x = 0;
   this.y = 325.25;
@@ -104,7 +107,7 @@ Player.prototype.move = function() {
 
 Player.prototype.shoot = function () {
   this.bullet.push(new Bullet(this.game, this.x, this.y))
-  //this.disparo.play();
+  this.disparo.play();
 };
 
 Player.prototype.isCollision = function(a) {
@@ -116,6 +119,7 @@ Player.prototype.isCollision = function(a) {
         this.y + this.h - 20 >= o.y &&
         this.y <= o.y + o.h - 10
       ) {
+        this.roca.play();
         a.splice(a.indexOf(o), 1);
 
         this.game.explosion.drawShip(this.x, this.y);

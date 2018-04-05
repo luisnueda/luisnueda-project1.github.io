@@ -20,12 +20,18 @@ function Game(canvasId){
   
   this.explosion = new Explosion(this);
 
-  this.soundtrack = new Audio("sound/soundtrack.mp3")
+  this.soundtrack = new Audio("sound/soundtrack.mp3");
+  this.gameOverSound = new Audio("sound/gameOver.mp3")
+  this.soundtrackGameOver = new Audio("sound/soundtrackGameOver.mp3");
+  this.levelUp = new Audio("sound/levelUp.mp3");
+
+
+  
 
 }
 
 Game.prototype.start = function() {
-  //this.soundtrack.play();
+  this.soundtrack.play();
   this.interval = setInterval(
     function() {
       this.framesCounter++;
@@ -37,6 +43,11 @@ Game.prototype.start = function() {
       this.draw();
       this.isCollision();
 
+      if((this.framesTime >= 1000 && this.framesTime<= 1000) 
+        || (this.framesTime >= 2000 && this.framesTime <= 2000)){
+        this.levelUp.play();
+      }
+
       if (this.framesTime < 900) {
         if (this.framesCounter % 100 === 0) {
           this.generateObstacle();
@@ -44,13 +55,28 @@ Game.prototype.start = function() {
         if (this.framesCounter % 100 === 0) {
           this.generateObstacleEnemy();
         }
-      } else if (this.framesTime > 1000) {
+      } else if (this.framesTime > 1000 && this.framesTime <1990) {
         this.estado = true;
         this.score.drawLevel();
+
         if (this.framesCounter % 200 === 0) {
           this.generateObstacle();
         }
-        if (this.framesCounter % 50 === 0) {
+        if (this.framesCounter % 40 === 0) {
+          this.generateObstacleEnemy();
+        }
+        if (this.framesCounter % 1000 === 0) {
+          this.generateObstacleEnemy2();
+        }
+
+      } else if (this.framesTime > 2000) {
+        this.estado = true;
+        
+        this.score.drawLevel3();
+        if (this.framesCounter % 200 === 0) {
+          this.generateObstacle();
+        }
+        if (this.framesCounter % 10 === 0) {
           this.generateObstacleEnemy();
         }
         if (this.framesCounter % 1000 === 0) {
@@ -58,14 +84,10 @@ Game.prototype.start = function() {
         }
       }
 
-      // if (this.framesTime > 1000) {
-
-
-
-      // }
-
       if (this.score.lives == 0) {
+        this.gameOverSound.play();
         this.gameOver();
+        this.soundtrackGameOver.play();
 
       }
     }.bind(this),
@@ -94,6 +116,7 @@ Game.prototype.clear = function() {
 // ---- Collision ---- //
 
 Game.prototype.isCollision = function() {
+  
   
   this.player.isCollision(this.obstacles);
   this.player.isCollision(this.obstaclesEnemy);
@@ -180,9 +203,6 @@ Game.prototype.reset = function() {
 
 Game.prototype.gameOver = function() {
   this.stop();
+  this.soundtrack.pause();
   $(".gameOver").fadeIn(100);
-  // if(confirm("GAME OVER. Play again?")) {
-  //   this.reset();
-  //   this.start();
-  // }
 };

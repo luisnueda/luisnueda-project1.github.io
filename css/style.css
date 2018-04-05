@@ -13,19 +13,13 @@ body{
   font-family: 'Press Start 2P', cursive;
 }
 /* Poner canvas al 100% */
-.pricipal{
+.principal{
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   align-items: center;
 
-}
-.pricipal-canvas{
-
-}
-p{
-  margin-top: 2px;
 }
 .intro, .gameOver{
   height: 100vh;
@@ -40,10 +34,18 @@ p{
   align-items: center;
 }
 .gameOver{
-  background: blue;
-  display: none;
+  background: #0000ff1f;
+
 }
 #start{
  position: absolute;
  bottom: 0;
+}
+#retry{
+  width: 20%;
+  margin-top: 4%;
+  color: black;
+}
+h1{
+  font-size: 77px;
 }
