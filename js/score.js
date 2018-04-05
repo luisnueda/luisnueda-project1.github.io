@@ -2,7 +2,7 @@ function Score(game){
   this.game = game;
 
   this.points = 0;
-  this.lives = 2;
+  this.lives = 10;
 
 }
 

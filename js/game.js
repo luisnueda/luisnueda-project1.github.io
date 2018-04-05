@@ -25,9 +25,6 @@ function Game(canvasId){
   this.soundtrackGameOver = new Audio("sound/soundtrackGameOver.mp3");
   this.levelUp = new Audio("sound/levelUp.mp3");
 
-
-  
-
 }
 
 Game.prototype.start = function() {
