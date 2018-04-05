@@ -5,6 +5,7 @@
 }
 #canvas{
   max-width: 100%;
+  display: none;
 }
 body{
   background: black;
@@ -13,8 +14,10 @@ body{
 }
 /* Poner canvas al 100% */
 .pricipal{
+  height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
   align-items: center;
 
 }
@@ -23,4 +26,17 @@ body{
 }
 p{
   margin-top: 2px;
+}
+.intro, .gameOver{
+  height: 100vh;
+  width: 100%;
+  background: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
+.gameOver{
+  background: blue;
+  display: none;
 }
